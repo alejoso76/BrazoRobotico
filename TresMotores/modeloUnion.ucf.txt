@@ -1,0 +1,15 @@
+NET "C1" LOC = B8; # Reloj 
+NET "C2" LOC = B8; # Reloj 
+NET "C3" LOC = B8; # Reloj 
+
+NET "R1" LOC = G12; #Button
+NET "R2" LOC = G12; #Button
+NET "R3" LOC = G12; #Button
+
+NET "PWa3<7>" LOC = F3;  
+NET "PWa2<7>" LOC = E2;  
+NET "PWa1<7>" LOC = N3;  
+
+NET "PWMa1" LOC = M5;  # Out
+NET "PWMa2" LOC = M5;  # Out  Falta acomodar este
+NET "PWMa3" LOC = M5;  # Out  Falta acomodar este
