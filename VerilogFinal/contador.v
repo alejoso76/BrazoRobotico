@@ -8,7 +8,7 @@ module contador(
 //-------------------------------------------------------------------
 always @(posedge CLK)
 	begin
-		//Alcanza el limite y regresa a 0
+		//Alcanza el limite (20 ms) y regresa a 0
 		if(condiv == 999999)
 			condiv <= 0;
 		else
