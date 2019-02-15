@@ -3,8 +3,8 @@
 
 module memoriaROM(
     input CLK,
-    input [7:0] POS,
-    output [31:0] DATOS
+    input [7:0] address,
+    output reg [31:0] DATOS
     );
 
 		//Servomotor 1 [31:24]
@@ -15,7 +15,7 @@ module memoriaROM(
 //-------------------------------------------------------------------
 always @(posedge CLK)
 	begin                   
-		case(POS)				//    Servo1  Servo2   Servo3  Tiempo
+		case(address)				//    Servo1  Servo2   Servo3  Tiempo
 			                  //   ((((((((--------........xxxxxxxx
 									
 			//Servomotor 1, 4 posiciones: 1 cada 60°
