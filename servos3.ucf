@@ -1,0 +1,5 @@
+NET "CLK" LOC = B8;
+NET "PWM1" LOC = L15;
+NET "PWM2" LOC = M13;
+NET "PWM3" LOC = J16;
+
