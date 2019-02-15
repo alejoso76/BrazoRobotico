@@ -2,63 +2,88 @@
 //-------------------------------------------------------------------
 module servos3(
 	input CLK,
-	input SW1,
-	input SW2,
-	input SW3,
+	//input SW1,
+	//input SW2,
+	//input SW3,
 	output PWM1,
 	output PWM2,
 	output PWM3
 );
 
 //-------------------------------------------------------------------
-wire [19:0] a_net; // Conexion con el contador
-wire [16:0] value_net1; // Valor para determinar el angulo 1
-wire [16:0] value_net2; // Valor para determinar el angulo 2
-wire [16:0] value_net3; // Valor para determinar el angulo 3
+wire [19:0] comparadorWire; // Conexion con el contador
+wire [16:0] temPWMWire1; // Valor para determinar el angulo 1
+wire [16:0] temPWMWire2; // Valor para determinar el angulo 2
+wire [16:0] temPWMWire3; // Valor para determinar el angulo 3
+wire [7:0] addressWire; //Direccion
+wire [31:0] datosWire;	//Datos de salida de la memoria ROM
+wire enablerAddress;
 
 //-------------------------------------------------------------------
 // Instancia del contador - 20 ms
 contador counter(
 	.CLK(CLK),
-	.condiv(a_net)
+	.condiv(comparadorWire)
+);
+
+//Instancia next address enabler
+addressCounter addrCount(
+	.CLK(CLK),
+	.nextAddrEnabler(enablerAddress), 
+	.address(addressWire)
+);
+
+//Instancia de la memoria ROM
+memoriaROM mem1(
+	.CLK(CLK),
+	.address(addressWire), 
+	.DATOS(datosWire) 
+);
+
+//Instancia
+nextAddressEnabler tiempo(
+	.CLK(CLK),
+	.counter(comparadorWire),
+	.dataTimeROM(datosWire[7:0]), 
+	.enabler(enablerAddress) // habilitador para pasar a la siguiente posición
 );
 
 //Motor 1-------------------------------------------------------------------
 angulo angulo1(
 	.CLK(CLK),
-	.SW1(SW1),
-	.temPWM(value_net1)
+	.address(datosWire[31:24]),
+	.temPWM(temPWMWire1)
 );
 comparador comparador1(
 	.CLK(CLK),
-	.a(a_net),
-	.b(value_net1),
+	.a(comparadorWire),
+	.b(temPWMWire1),
 	.PWM(PWM1)
 );
 
 //Motor 2-------------------------------------------------------------------
 angulo angulo2(
 	.CLK(CLK),
-	.SW1(SW2),
-	.temPWM(value_net2)
+	.address(datosWire[23:16]),
+	.temPWM(temPWMWire2)
 );
 comparador comparador2(
 	.CLK(CLK),
-	.a(a_net),
-	.b(value_net2),
+	.a(comparadorWire),
+	.b(temPWMWire2),
 	.PWM(PWM2)
 );
 
 //Motor 3-------------------------------------------------------------------
 angulo angulo3(
 	.CLK(CLK),
-	.SW1(SW3),
-	.temPWM(value_net3)
+	.address(datosWire[15:8]),
+	.temPWM(temPWMWire3)
 );
 comparador comparador3(
 	.CLK(CLK),
-	.a(a_net),
-	.b(value_net3),
+	.a(comparadorWire),
+	.b(temPWMWire3),
 	.PWM(PWM3)
 );
 endmodule

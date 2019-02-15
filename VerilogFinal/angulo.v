@@ -2,17 +2,22 @@
 //-------------------------------------------------------------------
 module angulo(
 	input CLK,
-	input SW1, //0° - 180°
+	input [7:0] address, //0° - 180°
 	output reg[16:0] temPWM //Ancho de pulso
     );
 
 //-------------------------------------------------------------------
+reg[19:0] CONTAUX=20'b0;
+
 always @(posedge CLK) 
 	begin
-		if(SW1 == 1)
-			temPWM <= 125000; //Valor ancho de pulso máximo -> 180°
+		if(CONTAUX == 999999)
+		begin
+			temPWM <= 125000 + (address * 392); //Valor ancho de pulso máximo -> 180°
+			CONTAUX <= 0;
+		end	
 		else
-			temPWM <= 25000; //Valor ancho de pulso mínimo -> 0°
+			CONTAUX <= CONTAUX + 1; //Valor ancho de pulso mínimo -> 0°
 	end
 
 
